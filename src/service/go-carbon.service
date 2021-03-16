@@ -1,0 +1,16 @@
+[Unit]
+Description=Golang implementation of Graphite/Carbon server.
+Documentation=https://github.com/go-graphite/go-carbon
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/opt/go-carbon/go-carbon -config /opt/go-carbon/go-carbon.conf -pidfile /opt/go-carbon/go-carbon.pid -daemon
+Restart=on-failure
+
+TimeoutStopSec=600
+LimitNOFILE=55555
+LimitMEMLOCK=infinity
+
+[Install]
+WantedBy=multi-user.target

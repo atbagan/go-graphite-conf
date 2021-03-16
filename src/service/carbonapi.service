@@ -1,0 +1,13 @@
+[Unit]
+Description=CarbonAPI - replacement for graphite-web written in Go
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/carbonapi/carbonapi -config /opt/carbonapi/carbonapi.yml
+LimitNOFILE=200000
+RuntimeDirectory=carbonapi
+RuntimeDirectoryMode=0755
+
+[Install]
+WantedBy=multi-user.target

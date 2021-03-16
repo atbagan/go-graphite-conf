@@ -1,0 +1,74 @@
+listen: ":80"
+
+prefix: ""
+
+unicodeRangeTables:
+  - "all"
+
+cache:
+  type: "mem"
+  size_mb: 0
+  defaultTimeoutSec: 60
+
+backendCache:
+  type: "mem"
+  size_mb: 0
+  defaultTimeoutSec: 60
+
+cpus: 1
+
+tz: "America/Chicago,0"
+
+logger:
+  - logger: "access"
+    file: "/opt/carbonapi/carbonapi_access.log"
+    level: "info"
+    encoding: "console"
+    encodingTime: "iso8601"
+    encodingDuration: "seconds"
+  - logger: "main"
+    file: "/opt/carbonapi/carbonapi.log"
+    encoding: "console"
+    level: "debug"
+    encodingTime: "iso8601"
+    encodingDuration: "seconds"
+
+upstreams:
+  graphite09compat: false
+  buckets: 10
+
+  concurrencyLimitPerServer: 0
+  keepAliveInterval: "30s"
+  maxIdleConnsPerHost: 100
+  timeouts:
+    find: "2s"
+    render: "10s"
+    connect: "200ms"
+
+  carbonsearchv2:
+    prefix: "virt.v1.*"
+    backends:
+      -
+        groupName: "shard-1"
+        protocol: "carbonapi_v2_pb"
+        lbMethod: "rr"
+        servers:
+          - "http://127.0.0.1:8080"
+  #backends section will override this one!
+  backendsv2:
+    backends:
+      -
+        groupName: "go-carbon-group1"
+        protocol: "carbonapi_v3_pb"
+        lbMethod: "broadcast"
+        maxTries: 3
+        maxBatchSize: 100
+        keepAliveInterval: "10s"
+        concurrencyLimit: 0
+        maxIdleConnsPerHost: 1000
+        timeouts:
+          find: "2s"
+          render: "50s"
+          connect: "200ms"
+        servers:
+          - "http://127.0.0.1:8080"
