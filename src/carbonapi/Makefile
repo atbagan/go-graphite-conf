@@ -12,42 +12,42 @@ PKG_MOCKBACKEND=github.com/go-graphite/carbonapi/cmd/mockbackend
 PKG_CARBONZIPPER=github.com/go-graphite/carbonapi/cmd/carbonzipper
 
 carbonapi: $(shell find . -name '*.go' | grep -v 'vendor')
-        PKG_CONFIG_PATH="$(EXTRA_PKG_CONFIG_PATH)" GO111MODULE=on $(GO) build -mod=vendor -v -tags cairo -ldflags '-X main.BuildVersion=$(VERSION)' $(PKG_CARBONAPI)
+	PKG_CONFIG_PATH="$(EXTRA_PKG_CONFIG_PATH)" GO111MODULE=on $(GO) build -mod=vendor -v -tags cairo -ldflags '-X main.BuildVersion=$(VERSION)' $(PKG_CARBONAPI)
 
 mockbackend: $(shell find . -name '*.go' | grep -v 'vendor')
-        GO111MODULE=on $(GO) build -mod=vendor -v -ldflags '-X main.BuildVersion=$(VERSION)' $(PKG_MOCKBACKEND)
+	GO111MODULE=on $(GO) build -mod=vendor -v -ldflags '-X main.BuildVersion=$(VERSION)' $(PKG_MOCKBACKEND)
 
 debug:
-        PKG_CONFIG_PATH="$(EXTRA_PKG_CONFIG_PATH)" GO111MODULE=on $(GO) build -mod=vendor -v -tags cairo -ldflags '-X main.BuildVersion=$(VERSION)' -gcflags=all='-l -N' $(PKG_CARBONAPI)
+	PKG_CONFIG_PATH="$(EXTRA_PKG_CONFIG_PATH)" GO111MODULE=on $(GO) build -mod=vendor -v -tags cairo -ldflags '-X main.BuildVersion=$(VERSION)' -gcflags=all='-l -N' $(PKG_CARBONAPI)
 
 nocairo:
-        GO111MODULE=on $(GO) build -mod=vendor -ldflags '-X main.BuildVersion=$(VERSION)' $(PKG_CARBONAPI)
+	GO111MODULE=on $(GO) build -mod=vendor -ldflags '-X main.BuildVersion=$(VERSION)' $(PKG_CARBONAPI)
 
 carbonzipper: $(shell find . -name '*.go' | grep -v 'vendor')
-        GO111MODULE=on $(GO) build -mod=vendor --ldflags '-X main.BuildVersion=$(VERSION)' $(PKG_CARBONZIPPER)
+	GO111MODULE=on $(GO) build -mod=vendor --ldflags '-X main.BuildVersion=$(VERSION)' $(PKG_CARBONZIPPER)
 
 test:
-        PKG_CONFIG_PATH="$(EXTRA_PKG_CONFIG_PATH)" $(GO) test -mod=vendor -tags cairo ./... -race
+	PKG_CONFIG_PATH="$(EXTRA_PKG_CONFIG_PATH)" $(GO) test -mod=vendor -tags cairo ./... -race
 
 test_nocairo:
-        $(GO) test -mod=vendor ./... -race
+	$(GO) test -mod=vendor ./... -race
 
 vet:
-        $(GO) vet
+	$(GO) vet
 
 install:
-        mkdir -p $(DESTDIR)/usr/bin/
-        mkdir -p $(DESTDIR)/usr/share/carbonapi/
-        cp ./carbonapi $(DESTDIR)/usr/bin/
-        cp ./cmd/carbonapi/carbonapi.example.yaml $(DESTDIR)/usr/share/carbonapi/
+	mkdir -p $(DESTDIR)/usr/bin/
+	mkdir -p $(DESTDIR)/usr/share/carbonapi/
+	cp ./carbonapi $(DESTDIR)/usr/bin/
+	cp ./cmd/carbonapi/carbonapi.example.yaml $(DESTDIR)/usr/share/carbonapi/
 
 install_carbonzipper:
-        mkdir -p $(DESTDIR)/usr/bin/
-        mkdir -p $(DESTDIR)/usr/share/carbonzipper/
-        cp ./carbonzipper $(DESTDIR)/usr/bin/
-        cp ./cmd/carbonzipper/example.conf $(DESTDIR)/usr/share/carbonzipper/
+	mkdir -p $(DESTDIR)/usr/bin/
+	mkdir -p $(DESTDIR)/usr/share/carbonzipper/
+	cp ./carbonzipper $(DESTDIR)/usr/bin/
+	cp ./cmd/carbonzipper/example.conf $(DESTDIR)/usr/share/carbonzipper/
 
 clean:
-        rm -f carbonapi carbonzipper mockbackend
-        rm -f *.deb
-        rm -f *.rpm
+	rm -f carbonapi carbonzipper mockbackend
+	rm -f *.deb
+	rm -f *.rpm
